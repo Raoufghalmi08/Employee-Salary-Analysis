@@ -7,33 +7,27 @@ def description(df):
      print(df.info())
      print(df.head())
      print(df.columns)
-     #calculate avr/total/nmb of employees :
-     
-     avrsalary=employees_df["Salary"].mean()
-     totalsal=employees_df["Salary"].sum()
-     totalemployees=employees_df["Name"].count()
+     #calculate avr/total/nmb/ maxsalary/min salary of employees :
+def salary_statistics(df):
+     avrsalary=df["Salary"].mean()
+     totalsal=df["Salary"].sum()
+     totalemployees=df["Name"].count()
      print("the average salary is :",avrsalary)
      print("the total salary is :",totalsal)
      print("total employees is :",totalemployees)
-#calculate maxsalary:
-def maxsalary(df):
-   maxsal=df["Salary"].max()
-   print("the highest salary is :",maxsal,"of :",df.loc[df["Salary"].idxmax()]["Name"])
-#calculate minsalary:
-def minsalary(df):
-    minsal=df["Salary"].min()
-    print("the lowest salary is :",minsal,"of :",df.loc[df["Salary"].idxmin()]["Name"])
+     maxsal=df["Salary"].max()
+     #maxsalemp: the name of the employeer who had max salary
+     maxsalEmp=df.loc[df["Salary"].idxmax()]
+     print("the highest salary is :",maxsal,"of :",maxsalEmp["Name"])
+     minsal=df["Salary"].min()
+     #minsalEmp: the name of the employeer who had min salary 
+     minsalEmp=df.loc[df["Salary"].idxmin()]
+     print("the lowest salary is :",minsal,"of :",minsalEmp["Name"])
 # calling fonction:
-discription(employees_df)
-maxsalary(employees_df)
-minsalary(employees_df)
-#calculate avr/total/nmb of employees :
-avrsalary=employees_df["Salary"].mean()
-totalsal=employees_df["Salary"].sum()
-totalemployees=employees_df["Name"].count()
-print("the average salary is :",avrsalary)
-print("the total salary is :",totalsal)
-print("total employees is :",totalemployees)
+description(employees_df)
+salary_statistics(employees_df)
+
+
 #Department_analysis ( sum salary / average salary / Number of employees / hight salary )by department 
 def Department_analysis(df):
       sumSA_bydepartement=df.groupby("Department")["Salary"].sum().sort_values(ascending=False)
@@ -44,6 +38,9 @@ def Department_analysis(df):
       print("number of employees in each department is :",numEM_bydepartment)
       highsal=df.groupby("Department")["Salary"].max()
       print("the highest salary in each departement is ",highsal,"by",df.loc[df["Salary"]].idxmax()["Name"])
+
+      return sumSA_bydepartement,AvrSa_bydepartement,highsal,numEM_bydepartment
+
 #City_analysis ( sum salary / average salary  / hight salary )by City 
 def City_analysis(df):
        sumSA_bycity=df.groupby("City")["Salary"].sum()
@@ -54,10 +51,12 @@ def City_analysis(df):
        
        highSalery=df.groupby("City")["Salary"].max()
        print("the highest salary in each city is :",highSalery)
+       return sumSA_bycity,AvrSa_bycity,highSalery
 
 #calling fonction
-Department_analysis(employees_df)
-City_analysis(employees_df)
+sumSA_bydepartement, AvrSa_bydepartement, highsal,numEM_bydepartment = Department_analysis(employees_df)
+
+sumSA_bycity,AvrSa_bycity,highSalery=City_analysis(employees_df)
 #graph
 color=[]
 for salar in sumSA_bydepartement:
